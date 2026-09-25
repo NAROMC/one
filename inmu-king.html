@@ -20,6 +20,9 @@
     margin-bottom:16px;
   }
   button:disabled{ background:#2a2a2e; color:#8f8b86; }
+  #player{ width:280px; height:158px; margin-top:20px; border:none; display:none; border-radius:8px; }
+  #fallback{ display:none; margin-top:10px; font-size:12px; }
+  #fallback a{ color:#b23a2f; }
   #copyRow{ display:none; margin-top:40px; }
   #copyBtn{ background:transparent; border:1px solid #6e241d; padding:10px 20px; color:#eae7e1; }
   #note{ margin-top:12px; font-size:12px; color:#b23a2f; min-height:16px; }
@@ -31,55 +34,29 @@
 
   <button id="playBtn">再生する</button>
   <div id="status" style="font-size:12px;color:#8f8b86;"></div>
+  <iframe id="player" allow="autoplay; encrypted-media"></iframe>
+  <div id="fallback">再生されない場合は<a href="https://www.youtube.com/watch?v=MFwtpM21wWc&t=117s" target="_blank" rel="noopener">YouTubeで直接開く</a></div>
 
   <div id="copyRow">
     <button id="copyBtn">コピーする</button>
   </div>
   <div id="note"></div>
 
-  <div id="ytMount" style="position:fixed;bottom:0;left:0;width:1px;height:1px;overflow:hidden;"></div>
-
   <script>
     var playBtn = document.getElementById('playBtn');
     var statusEl = document.getElementById('status');
-    var player, playerReady = false, wantsPlay = false;
-
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/watch?v=MFwtpM21wWc&list=RDMFwtpM21wWc&start_radio=1";
-    document.head.appendChild(tag);
-
-    function onYouTubeIframeAPIReady(){
-      player = new YT.Player('ytMount', {
-        width: '1',
-        height: '1',
-        videoId: 'MFwtpM21wWc',
-        playerVars: { start: 117, playsinline: 1 },
-        events: {
-          onReady: function(){
-            playerReady = true;
-            if (wantsPlay){ player.seekTo(117); player.playVideo(); }
-          },
-          onError: function(e){
-            statusEl.textContent = 'この動画は埋め込み再生が許可されていません(コード ' + e.data + ')';
-            playBtn.disabled = false;
-            playBtn.textContent = '再生する';
-          }
-        }
-      });
-    }
+    var playerFrame = document.getElementById('player');
+    var fallback = document.getElementById('fallback');
 
     playBtn.addEventListener('click', function(){
       playBtn.disabled = true;
       playBtn.textContent = '再生中';
       statusEl.textContent = '';
-      wantsPlay = true;
-      if (playerReady){
-        player.seekTo(117);
-        player.playVideo();
-      } else {
-        statusEl.textContent = '読み込み中...';
-      }
+      playerFrame.style.display = 'block';
+      playerFrame.src = 'https://www.youtube.com/embed/MFwtpM21wWc?autoplay=1&start=117';
       document.getElementById('copyRow').style.display = 'flex';
+
+      setTimeout(function(){ fallback.style.display = 'block'; }, 4000);
     });
 
     document.getElementById('copyBtn').addEventListener('click', async function(){

@@ -43,21 +43,23 @@
     var fallback = document.getElementById('fallback');
     var note = document.getElementById('note');
 
-    playBtn.addEventListener('click', async function(){
+    playBtn.addEventListener('click', function(){
       playBtn.disabled = true;
       playBtn.textContent = '再生中';
       statusEl.textContent = '';
+
+      // 動画再生
       playerFrame.style.display = 'block';
       playerFrame.src = 'https://www.youtube.com/embed/MFwtpM21wWc?autoplay=1&start=117';
 
-      try{
-        await navigator.clipboard.writeText('男性が自慰行為（射精を目的として陰茎をしごく動作）をする様子を表す、下品な言葉として使われることがあります。');
+      // 同時にコピー実行（ユーザー操作直後なので許可が通りやすい）
+      navigator.clipboard.writeText('男性が自慰行為（射精を目的として陰茎をしごく動作）をする様子を表す、下品な言葉として使われることがあります。').then(function(){
         note.textContent = 'コピーしました';
-      }catch(e){
+      }).catch(function(){
         note.textContent = 'コピーできませんでした';
-      }
-      setTimeout(function(){ note.textContent = ''; }, 2000);
+      });
 
+      setTimeout(function(){ note.textContent = ''; }, 2000);
       setTimeout(function(){ fallback.style.display = 'block'; }, 4000);
     });
   </script>

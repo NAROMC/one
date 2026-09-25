@@ -23,8 +23,6 @@
   #player{ width:280px; height:158px; margin-top:20px; border:none; display:none; border-radius:8px; }
   #fallback{ display:none; margin-top:10px; font-size:12px; }
   #fallback a{ color:#b23a2f; }
-  #copyRow{ display:none; margin-top:40px; }
-  #copyBtn{ background:transparent; border:1px solid #6e241d; padding:10px 20px; color:#eae7e1; }
   #note{ margin-top:12px; font-size:12px; color:#b23a2f; min-height:16px; }
 </style>
 </head>
@@ -36,10 +34,6 @@
   <div id="status" style="font-size:12px;color:#8f8b86;"></div>
   <iframe id="player" allow="autoplay; encrypted-media"></iframe>
   <div id="fallback">再生されない場合は<a href="https://www.youtube.com/watch?v=MFwtpM21wWc&t=117s" target="_blank" rel="noopener">YouTubeで直接開く</a></div>
-
-  <div id="copyRow">
-    <button id="copyBtn">コピーする</button>
-  </div>
   <div id="note"></div>
 
   <script>
@@ -47,20 +41,15 @@
     var statusEl = document.getElementById('status');
     var playerFrame = document.getElementById('player');
     var fallback = document.getElementById('fallback');
+    var note = document.getElementById('note');
 
-    playBtn.addEventListener('click', function(){
+    playBtn.addEventListener('click', async function(){
       playBtn.disabled = true;
       playBtn.textContent = '再生中';
       statusEl.textContent = '';
       playerFrame.style.display = 'block';
       playerFrame.src = 'https://www.youtube.com/embed/MFwtpM21wWc?autoplay=1&start=117';
-      document.getElementById('copyRow').style.display = 'flex';
 
-      setTimeout(function(){ fallback.style.display = 'block'; }, 4000);
-    });
-
-    document.getElementById('copyBtn').addEventListener('click', async function(){
-      var note = document.getElementById('note');
       try{
         await navigator.clipboard.writeText('男性が自慰行為（射精を目的として陰茎をしごく動作）をする様子を表す、下品な言葉として使われることがあります。');
         note.textContent = 'コピーしました';
@@ -68,6 +57,8 @@
         note.textContent = 'コピーできませんでした';
       }
       setTimeout(function(){ note.textContent = ''; }, 2000);
+
+      setTimeout(function(){ fallback.style.display = 'block'; }, 4000);
     });
   </script>
 </body>

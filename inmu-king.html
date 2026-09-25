@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>優雅な音楽</title>
+<style>
+  body{
+    margin:0; height:100vh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    background:#0b0b0d; color:#eae7e1;
+    font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    text-align:center;
+  }
+  h1{ font-size:2.6rem; margin:0 0 4px; }
+  .artist{ color:#8f8b86; margin-bottom:40px; }
+  button{
+    font-family:inherit; cursor:pointer; border:none; border-radius:999px;
+    padding:14px 36px; font-size:15px; background:#b23a2f; color:#f4efe9;
+    margin-bottom:16px;
+  }
+  button:disabled{ background:#2a2a2e; color:#8f8b86; }
+  #copyRow{ display:none; margin-top:40px; }
+  #copyBtn{ background:transparent; border:1px solid #6e241d; padding:10px 20px; color:#eae7e1; }
+  #note{ margin-top:12px; font-size:12px; color:#b23a2f; min-height:16px; }
+</style>
+</head>
+<body>
+  <h1>優雅な音楽</h1>
+  <div class="artist">YAJU-MC</div>
+
+  <button id="playBtn">再生する</button>
+  <div id="status" style="font-size:12px;color:#8f8b86;"></div>
+
+  <div id="copyRow">
+    <button id="copyBtn">コピーする</button>
+  </div>
+  <div id="note"></div>
+
+  <div id="ytMount" style="position:fixed;bottom:0;left:0;width:1px;height:1px;overflow:hidden;"></div>
+
+  <script>
+    var playBtn = document.getElementById('playBtn');
+    var statusEl = document.getElementById('status');
+    var player, playerReady = false, wantsPlay = false;
+
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/watch?v=MFwtpM21wWc&list=RDMFwtpM21wWc&start_radio=1";
+    document.head.appendChild(tag);
+
+    function onYouTubeIframeAPIReady(){
+      player = new YT.Player('ytMount', {
+        width: '1',
+        height: '1',
+        videoId: 'MFwtpM21wWc',
+        playerVars: { start: 117, playsinline: 1 },
+        events: {
+          onReady: function(){
+            playerReady = true;
+            if (wantsPlay){ player.seekTo(117); player.playVideo(); }
+          },
+          onError: function(e){
+            statusEl.textContent = 'この動画は埋め込み再生が許可されていません(コード ' + e.data + ')';
+            playBtn.disabled = false;
+            playBtn.textContent = '再生する';
+          }
+        }
+      });
+    }
+
+    playBtn.addEventListener('click', function(){
+      playBtn.disabled = true;
+      playBtn.textContent = '再生中';
+      statusEl.textContent = '';
+      wantsPlay = true;
+      if (playerReady){
+        player.seekTo(117);
+        player.playVideo();
+      } else {
+        statusEl.textContent = '読み込み中...';
+      }
+      document.getElementById('copyRow').style.display = 'flex';
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', async function(){
+      var note = document.getElementById('note');
+      try{
+        await navigator.clipboard.writeText('男性が自慰行為（射精を目的として陰茎をしごく動作）をする様子を表す、下品な言葉として使われることがあります。');
+        note.textContent = 'コピーしました';
+      }catch(e){
+        note.textContent = 'コピーできませんでした';
+      }
+      setTimeout(function(){ note.textContent = ''; }, 2000);
+    });
+  </script>
+</body>
+</html>
